@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
+
 class TextLSTM(object):
 	
 	def __init__(
@@ -19,8 +20,9 @@ class TextLSTM(object):
         # Embedding layer
         with tf.device('/cpu:0'), tf.name_scope("embedding"):
             # W is our embedding matrix that we learn during training. We initialize it using a random uniform distribution
-            W = tf.Variable(
-            	tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0), 
+            self.W = tf.Variable(
+            	tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
+                trainable=False, 
             	name="W")
             
             # tf.nn.embedding_lookup creates the actual embedding operation
@@ -46,9 +48,11 @@ class TextLSTM(object):
 		    	sequence_length=self.seqlen)
     		lstm_outputs_bw = tf.nn.rnn._reverse_seq(tmp, self.seqlen)
 
-    		# Concatenate outputs fw and bw to outputs
+    		# Concatenate outputs
     		self.lstm_outputs = tf.add(outputs_fw, outputs_bw, name="lstm_outputs")
     		self.lstm_outputs_mean = tf.reduce_mean(lstm_outputs, 1, name="lstm_outputs_mean")
+            # TODO: Outputs after seqlen will be zeroes...
+            # But must implement CNN after this point so taking mean can be ignored 
 
     	# Add dropout
         with tf.name_scope("dropout"):
@@ -68,7 +72,7 @@ class TextLSTM(object):
             self.scores = tf.nn.xw_plus_b(self.outputs_drop, W, b, name="scores")
             self.predictions = tf.argmax(self.scores, reduction_indices=1, name="predictions")
 
-        # CalculateMean cross-entropy loss
+        # Calculate mean cross-entropy loss
         with tf.name_scope("loss"):
             losses = tf.nn.softmax_cross_entropy_with_logits(self.scores, self.input_y)
             self.loss = tf.reduce_mean(losses) + l2_reg_lambda * l2_loss

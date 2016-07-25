@@ -9,10 +9,12 @@ import data_helpers
 from text_lstm import TextLSTM
 from tensorflow.contrib import learn
 
+
 # Parameters
 # ==================================================
 
 # Model Hyperparameters
+tf.flags.DEFINE_string("word2vec", None, "Word2vec file with pre-trained embeddings (default: None)")
 tf.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of character embedding (default: 300)")
 tf.flags.DEFINE_integer("hidden_dim", 300, "Dimensionality of hidden layer in LSTM (default: 300")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
@@ -127,6 +129,34 @@ with tf.Graph().as_default():
         # Initialize all variables
         sess.run(tf.initialize_all_variables())
 
+        if FLAGS.word2vec:
+            # Initialize matrix with random uniform distribution
+            initW = np.random.uniform(-0.25,0.25,(len(vocab_processor.vocabulary_), FLAGS.embedding_dim))
+            # Load any vectors from word2vec
+            print("Load word2vec file {}\n".format(FLAGS.word2vec))
+            with open(FLAGS.word2vec, "rb") as f:
+                header = f.readline()
+                vocab_size, layer1_size = map(int, header.split())
+                binary_len = np.dtype('float32').itemsize * layer1_size
+                
+                for line in xrange(vocab_size):
+                    word = []
+                    while True:
+                        ch = f.read(1)
+                        if ch == ' ':
+                            word = ''.join(word)
+                            break
+                        if ch != '\n':
+                            word.append(ch)   
+                    
+                    idx = vocab_processor.vocabulary_.get(word)
+                    if idx != 0:
+                        initW[idx] = np.fromstring(f.read(binary_len), dtype='float32')  
+                    else:
+                        f.read(binary_len)    
+
+            sess.run(cnn.W.assign(initW))
+
         def train_step(x_batch, seqlen_batch, y_batch):
             """
             A single training step
@@ -165,13 +195,14 @@ with tf.Graph().as_default():
                 writer.add_summary(summaries, step)
 
         # Generate batches
-        batches = data_helpers.batch_iter(
+        batches, seqlen_batch = data_helpers.batch_iter(
             list(zip(x_train, y_train)), FLAGS.batch_size, FLAGS.num_epochs)
         
         # Training loop. For each batch...
+        batch_num = 0
         for batch in batches:
             x_batch, y_batch = zip(*batch)
-            train_step(x_batch, seqlen_batch, y_batch)
+            train_step(x_batch, seqlen_batch[batch_num], y_batch)
             current_step = tf.train.global_step(sess, global_step)
             
             if current_step % FLAGS.evaluate_every == 0:
@@ -182,4 +213,6 @@ with tf.Graph().as_default():
             if current_step % FLAGS.checkpoint_every == 0:
                 path = saver.save(sess, checkpoint_prefix, global_step=current_step)
                 print("Saved model checkpoint to {}\n".format(path))
+
+            batch_no += 1 # There are better ways to do this...Combining each batch element with corresponding seqlen element 
 

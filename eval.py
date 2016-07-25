@@ -9,6 +9,7 @@ import data_helpers
 from text_lstm import TextLSTM
 from tensorflow.contrib import learn
 
+
 # Parameters
 # ==================================================
 
@@ -68,14 +69,17 @@ with graph.as_default():
         predictions = graph.get_operation_by_name("output/predictions").outputs[0]
 
         # Generate batches for one epoch
-        batches = data_helpers.batch_iter(list(x_test), FLAGS.batch_size, 1, shuffle=False)
+        batches, seqlen_batch = data_helpers.batch_iter(list(x_test), FLAGS.batch_size, 1, shuffle=False)
 
         # Collect the predictions here
         all_predictions = []
 
+        batch_num = 0
         for x_test_batch in batches:
-            batch_predictions = sess.run(predictions, {input_x: x_test_batch, dropout_keep_prob: 1.0})
+            batch_predictions = sess.run(
+                predictions, {input_x: x_test_batch, seqlen: seqlen_batch[batch_num], dropout_keep_prob: 1.0})
             all_predictions = np.concatenate([all_predictions, batch_predictions])
+            batch_num += 1
 
 # Print accuracy if y_test is defined
 if y_test is not None:
