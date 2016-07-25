@@ -71,3 +71,4 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
             end_index = min((batch_num + 1) * batch_size, data_size)
             
             yield shuffled_data[start_index:end_index]
+            # must also add return for their lengths
