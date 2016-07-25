@@ -27,7 +27,7 @@ class TextLSTM(object):
             
             # tf.nn.embedding_lookup creates the actual embedding operation
             # The result of the embedding operation is a 3-dimensional tensor of shape [None, sequence_length, embedding_size]
-            self.embedded_chars = tf.nn.embedding_lookup(W, self.input_x)
+            self.embedded_chars = tf.nn.embedding_lookup(self.W, self.input_x)
 
         with tf.name_scope("bidirectional-lstm"):
 		    # Forward direction LSTM cell
