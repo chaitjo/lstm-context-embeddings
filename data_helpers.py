@@ -72,6 +72,6 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
             
             seqlen = []
             for idx in range(start_index, end_index+1):
-                seqlen.append(len(shuffled_data[idx]))
+                seqlen.append(len(shuffled_data[idx][0].split()))
 
             yield shuffled_data[start_index:end_index], seqlen

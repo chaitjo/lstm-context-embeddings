@@ -46,8 +46,8 @@ x_text, y = data_helpers.load_data_and_labels()
 
 # Build vocabulary
 max_document_length = max([len(x.split(" ")) for x in x_text])
-vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length)
-x = np.array(list(vocab_processor.fit_transform(x_text)))
+vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length) # Pads shorter documents
+x = np.array(list(vocab_processor.fit_transform(x_text))) # Learn the vocabulary dictionary and return indexies of words
 
 # Randomly shuffle data
 np.random.seed(10)
@@ -67,15 +67,14 @@ print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
 
 with tf.Graph().as_default():
     session_conf = tf.ConfigProto(
-    	allow_soft_placement=FLAGS.allow_soft_placement, 
-    	log_device_placement=FLAGS.log_device_placement)
+        allow_soft_placement=FLAGS.allow_soft_placement, 
+        log_device_placement=FLAGS.log_device_placement)
     sess = tf.Session(config=session_conf)
     
     with sess.as_default():
-
-    	lstm = TextLSTM(
-    		sequence_length=x_train.shape[1],
-    		num_classes=2,
+        lstm = TextLSTM(
+            sequence_length=x_train.shape[1],
+            num_classes=2,
             vocab_size=len(vocab_processor.vocabulary_),
             embedding_size=FLAGS.embedding_dim,
             hidden_size=FLAGS.hidden_dim,
@@ -195,24 +194,20 @@ with tf.Graph().as_default():
                 writer.add_summary(summaries, step)
 
         # Generate batches
-        batches, seqlen_batch = data_helpers.batch_iter(
+        batches = data_helpers.batch_iter(
             list(zip(x_train, y_train)), FLAGS.batch_size, FLAGS.num_epochs)
         
         # Training loop. For each batch...
-        batch_num = 0
-        for batch in batches:
+        for batch, seqlen_batch in batches:
             x_batch, y_batch = zip(*batch)
-            train_step(x_batch, seqlen_batch[batch_num], y_batch)
+            train_step(x_batch, seqlen_batch, y_batch)
             current_step = tf.train.global_step(sess, global_step)
             
             if current_step % FLAGS.evaluate_every == 0:
                 print("\nEvaluation:")
-                dev_step(x_dev, y_dev, writer=dev_summary_writer)
+                dev_step(x_dev, seqlen_dev, y_dev, writer=dev_summary_writer) # TODO: seqlen_dev!!!
                 print("")
             
             if current_step % FLAGS.checkpoint_every == 0:
                 path = saver.save(sess, checkpoint_prefix, global_step=current_step)
                 print("Saved model checkpoint to {}\n".format(path))
-
-            batch_no += 1 # There are better ways to do this...Combining each batch element with corresponding seqlen element 
-
