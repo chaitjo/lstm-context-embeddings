@@ -47,7 +47,7 @@ def load_data_and_labels():
     y = np.concatenate([positive_labels, negative_labels], 0)
 
     # Generate sequence lengths
-    seqlen = [len(sent.split()) for sent in x_text]
+    seqlen = np.array([len(sent.split(" ")) for sent in x_text])
     
     return [x_text, y, seqlen]
 
@@ -73,6 +73,6 @@ def batch_iter(data, seqlen_data, batch_size, num_epochs, shuffle=True):
             start_index = batch_num * batch_size
             end_index = min((batch_num + 1) * batch_size, data_size)
             
-            seqlen_batch = seqlen[start_index:end_index+1]
+            seqlen_batch = seqlen_data[start_index:end_index]
 
             yield shuffled_data[start_index:end_index], seqlen_batch

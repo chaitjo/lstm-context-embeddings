@@ -10,7 +10,7 @@ class TextLSTM(object):
 
         # Placeholders for input, sequence length, output and dropout
         self.input_x = tf.placeholder(tf.int32, [None, sequence_length], name="input_x")
-        self.seqlen = tf.placeholder(tf.int32, [None], name="seqlen")
+        self.seqlen = tf.placeholder(tf.int64, [None], name="seqlen")
         self.input_y = tf.placeholder(tf.float32, [None, num_classes], name="input_y")
         self.dropout_keep_prob = tf.placeholder(tf.float32, name="dropout_keep_prob")
 
@@ -38,30 +38,25 @@ class TextLSTM(object):
             # Backward direction LSTM cell
             lstm_bw_cell = rnn_cell.BasicLSTMCell(hidden_size, forget_bias=1.0)
 
-            # self.lstm_outputs, _ = rnn.bidirectional_dynamic_rnn(
-            #     lstm_fw_cell, 
-            #     lstm_bw_cell, 
-            #     self.embedded_chars,
-            #     sequence_length=self.seqlen,
-            #     dtype=tf.float32)
+            with tf.variable_scope("lstm-output-fw"):
+                lstm_outputs_fw, _ = rnn.dynamic_rnn(
+                    lstm_fw_cell, 
+                    self.embedded_chars, 
+                    dtype=tf.float32, 
+                    sequence_length=self.seqlen)
 
-            lstm_outputs_fw, _ = rnn.dynamic_rnn(
-                lstm_fw_cell, 
-                self.embedded_chars, 
-                dtype=tf.float32, 
-                sequence_length=self.seqlen)
-
-            self.embedded_chars_rev = array_ops.reverse_sequence(self.embedded_chars, self.seqlen)
-            tmp, _ = rnn.dynamic_rnn(
-                lstm_bw_cell, 
-                self.embedded_chars_rev,
-                dtype=tf.float32, 
-                sequence_length=self.seqlen)
-            lstm_outputs_bw = array_ops.reverse_sequence(tmp, self.seqlen)
+            with tf.variable_scope("lstm-output-bw"):
+                self.embedded_chars_rev = array_ops.reverse_sequence(self.embedded_chars, seq_lengths=self.seqlen, seq_dim=1)
+                tmp, _ = rnn.dynamic_rnn(
+                    lstm_bw_cell, 
+                    self.embedded_chars_rev,
+                    dtype=tf.float32, 
+                    sequence_length=self.seqlen)
+                lstm_outputs_bw = array_ops.reverse_sequence(tmp, seq_lengths=self.seqlen, seq_dim=1)
 
             # Concatenate outputs
-            self.lstm_outputs = tf.add(outputs_fw, outputs_bw, name="lstm_outputs")
-            self.lstm_outputs_mean = tf.reduce_mean(lstm_outputs, 1, name="lstm_outputs_mean")
+            self.lstm_outputs = tf.add(lstm_outputs_fw, lstm_outputs_bw, name="lstm_outputs")
+            self.lstm_outputs_mean = tf.reduce_mean(self.lstm_outputs, reduction_indices=1, name="lstm_outputs_mean")
             # TODO: Outputs after seqlen will be zeroes...
             # But must implement CNN after this point so taking mean can be ignored 
 
@@ -81,7 +76,7 @@ class TextLSTM(object):
             l2_loss += nn.l2_loss(b)
             
             self.scores = nn.xw_plus_b(self.outputs_drop, W, b, name="scores")
-            self.predictions = tf.argmax(self.scores, reduction_indices=1, name="predictions")
+            self.predictions = tf.argmax(self.scores, 1, name="predictions")
 
         # Calculate mean cross-entropy loss
         with tf.name_scope("loss"):
