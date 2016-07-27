@@ -1,6 +1,0 @@
-#!/bin/bash
-cd ~/tensorflow
-source bin/activate
-cd ~/lstm-context-embeddings
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"$HOME/.my_libc_env/lib/x86_64-linux-gnu/:$HOME/.my_libc_env/usr/lib64/" $HOME/.my_libc_env/lib/x86_64-linux-gnu/ld-2.17.so `which python` train.py embedding_dim=10 hidden_dim=10 num_epochs=2 2>&1 | tee ~/tf-output.txt
-read -p "Fin." -n 1 -scd
