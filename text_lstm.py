@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow.python.ops import rnn_cell, rnn, nn
+from tensorflow.python.ops import rnn_cell, rnn, nn, array_ops
 
 
 class TextLSTM(object):
@@ -9,7 +9,7 @@ class TextLSTM(object):
         embedding_size, hidden_size, l2_reg_lambda=0.0):
 
         # Placeholders for input, sequence length, output and dropout
-        self.input_x = tf.placeholder(tf.int32, [None, sequence_length, embedding_size], name="input_x")
+        self.input_x = tf.placeholder(tf.int32, [None, sequence_length], name="input_x")
         self.seqlen = tf.placeholder(tf.int32, [None], name="seqlen")
         self.input_y = tf.placeholder(tf.float32, [None, num_classes], name="input_y")
         self.dropout_keep_prob = tf.placeholder(tf.float32, name="dropout_keep_prob")

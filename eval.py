@@ -32,11 +32,12 @@ print("")
 
 # Load new datasets here
 if FLAGS.eval_train:
-    x_raw, y_test = data_helpers.load_data_and_labels()
+    x_raw, y_test, seqlen_test = data_helpers.load_data_and_labels()
     y_test = np.argmax(y_test, axis=1)
 else:
     x_raw = ["a masterpiece four years in the making", "everything is off."]
     y_test = [1, 0]
+    seqlen_test = [7, 3]
 
 # Map data into vocabulary
 vocab_path = os.path.join(FLAGS.checkpoint_dir, "..", "vocab")
@@ -69,7 +70,7 @@ with graph.as_default():
         predictions = graph.get_operation_by_name("output/predictions").outputs[0]
 
         # Generate batches for one epoch
-        batches = data_helpers.batch_iter(list(x_test), FLAGS.batch_size, 1, shuffle=False)
+        batches = data_helpers.batch_iter(list(x_test), seqlen_test, FLAGS.batch_size, 1, shuffle=False)
 
         # Collect the predictions here
         all_predictions = []

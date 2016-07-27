@@ -1,0 +1,29 @@
+sh: error while loading shared libraries: __vdso_time: invalid mode for dlopen(): Invalid argument
+sh: error while loading shared libraries: __vdso_time: invalid mode for dlopen(): Invalid argument
+sh: error while loading shared libraries: __vdso_time: invalid mode for dlopen(): Invalid argument
+sh: error while loading shared libraries: __vdso_time: invalid mode for dlopen(): Invalid argument
+WARNING:tensorflow:<tensorflow.python.ops.rnn_cell.BasicLSTMCell object at 0x7fde427a5f10>: Using a concatenated state is slower and will soon be deprecated.  Use state_is_tuple=True.
+WARNING:tensorflow:<tensorflow.python.ops.rnn_cell.BasicLSTMCell object at 0x7fde427a5bd0>: Using a concatenated state is slower and will soon be deprecated.  Use state_is_tuple=True.
+
+Parameters:
+ALLOW_SOFT_PLACEMENT=True
+BATCH_SIZE=64
+CHECKPOINT_EVERY=100
+DROPOUT_KEEP_PROB=0.5
+EMBEDDING_DIM=300
+EVALUATE_EVERY=100
+HIDDEN_DIM=300
+L2_REG_LAMBDA=0.0
+LOG_DEVICE_PLACEMENT=False
+NUM_EPOCHS=200
+WORD2VEC=None
+
+Loading data...
+Vocabulary Size: 18758
+Train/Dev split: 9662/1000
+Traceback (most recent call last):
+  File "train.py", line 81, in <module>
+    l2_reg_lambda=FLAGS.l2_reg_lambda)
+  File "/home/chaitanya/lstm-context-embeddings/text_lstm.py", line 54, in __init__
+    self.embedded_chars_rev = array_ops.reverse_sequence(self.embedded_chars, self.seqlen)
+TypeError: reverse_sequence() takes at least 3 arguments (2 given)

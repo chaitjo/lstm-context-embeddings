@@ -42,23 +42,29 @@ print("")
 
 # Load data
 print("Loading data...")
-x_text, y = data_helpers.load_data_and_labels()
+x_text, y, seqlen = data_helpers.load_data_and_labels()
+# x_text is one huge list with all the sentences as elements
+# y is a list of corresponding labels
 
 # Build vocabulary
-max_document_length = max([len(x.split(" ")) for x in x_text])
+max_document_length = max(seqlen) # '56' for RT corpus
 vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length) # Pads shorter documents
 x = np.array(list(vocab_processor.fit_transform(x_text))) # Learn the vocabulary dictionary and return indexies of words
+# At this point, x is an array of list of numbers where each number is the index to a word in the vocabulary.
 
 # Randomly shuffle data
 np.random.seed(10)
 shuffle_indices = np.random.permutation(np.arange(len(y)))
 x_shuffled = x[shuffle_indices]
 y_shuffled = y[shuffle_indices]
+seqlen_shuffled = seqlen[shuffle_indices]
 
 # Split train/test set
 # TODO: This is very crude, should use cross-validation
 x_train, x_dev = x_shuffled[:-1000], x_shuffled[-1000:]
 y_train, y_dev = y_shuffled[:-1000], y_shuffled[-1000:]
+seqlen_train, seqlen_dev = seqlen_shuffled[:-1000], seqlen_shuffled[-1000:]
+
 print("Vocabulary Size: {:d}".format(len(vocab_processor.vocabulary_)))
 print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
 
@@ -195,7 +201,7 @@ with tf.Graph().as_default():
 
         # Generate batches
         batches = data_helpers.batch_iter(
-            list(zip(x_train, y_train)), FLAGS.batch_size, FLAGS.num_epochs)
+            list(zip(x_train, y_train)), seqlen_train, FLAGS.batch_size, FLAGS.num_epochs)
         
         # Training loop. For each batch...
         for batch, seqlen_batch in batches:
@@ -205,7 +211,7 @@ with tf.Graph().as_default():
             
             if current_step % FLAGS.evaluate_every == 0:
                 print("\nEvaluation:")
-                dev_step(x_dev, seqlen_dev, y_dev, writer=dev_summary_writer) # TODO: seqlen_dev!!!
+                dev_step(x_dev, seqlen_dev, y_dev, writer=dev_summary_writer)
                 print("")
             
             if current_step % FLAGS.checkpoint_every == 0:

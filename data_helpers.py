@@ -45,11 +45,14 @@ def load_data_and_labels():
     positive_labels = [[0, 1] for _ in positive_examples]
     negative_labels = [[1, 0] for _ in negative_examples]
     y = np.concatenate([positive_labels, negative_labels], 0)
+
+    # Generate sequence lengths
+    seqlen = [len(sent.split()) for sent in x_text]
     
-    return [x_text, y]
+    return [x_text, y, seqlen]
 
 
-def batch_iter(data, batch_size, num_epochs, shuffle=True):
+def batch_iter(data, seqlen_data, batch_size, num_epochs, shuffle=True):
     """
     Generates a batch iterator for a dataset.
     """
@@ -70,8 +73,6 @@ def batch_iter(data, batch_size, num_epochs, shuffle=True):
             start_index = batch_num * batch_size
             end_index = min((batch_num + 1) * batch_size, data_size)
             
-            seqlen = []
-            for idx in range(start_index, end_index+1):
-                seqlen.append(len(shuffled_data[idx][0].split()))
+            seqlen_batch = seqlen[start_index:end_index+1]
 
-            yield shuffled_data[start_index:end_index], seqlen
+            yield shuffled_data[start_index:end_index], seqlen_batch
