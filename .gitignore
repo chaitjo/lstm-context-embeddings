@@ -1,7 +1,7 @@
-runs
-cnn-text-classification-tf
-Examples
-tf-documentation
+runs/
+cnn-text-classification-tf/
+Examples/
+tf-documentation/
 start_tf
 start_tf~
 .gitignore~
