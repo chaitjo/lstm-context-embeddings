@@ -4,4 +4,5 @@ Examples
 tf-documentation
 start_tf
 start_tf~
+.gitignore~
 *.pyc
