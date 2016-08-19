@@ -1,0 +1,280 @@
+sh: error while loading shared libraries: __vdso_time: invalid mode for dlopen(): Invalid argument
+sh: error while loading shared libraries: __vdso_time: invalid mode for dlopen(): Invalid argument
+sh: error while loading shared libraries: __vdso_time: invalid mode for dlopen(): Invalid argument
+sh: error while loading shared libraries: __vdso_time: invalid mode for dlopen(): Invalid argument
+WARNING:tensorflow:<tensorflow.python.ops.rnn_cell.BasicLSTMCell object at 0x7ffb12c74fd0>: Using a concatenated state is slower and will soon be deprecated.  Use state_is_tuple=True.
+WARNING:tensorflow:<tensorflow.python.ops.rnn_cell.BasicLSTMCell object at 0x7ffb12c74ed0>: Using a concatenated state is slower and will soon be deprecated.  Use state_is_tuple=True.
+
+Parameters:
+ALLOW_SOFT_PLACEMENT=True
+BATCH_SIZE=64
+CHECKPOINT_EVERY=100
+DROPOUT_KEEP_PROB=0.5
+EMBEDDING_DIM=300
+EVALUATE_EVERY=100
+HIDDEN_DIM=300
+L2_REG_LAMBDA=0.0
+LOG_DEVICE_PLACEMENT=False
+NUM_EPOCHS=200
+WORD2VEC=None
+
+Loading data...
+Vocabulary Size: 18758
+Train/Dev split: 9662/1000
+Writing to /home/chaitanya/lstm-context-embeddings/runs/1470336784
+
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:10.412638: step 1, loss 0.687039, acc 0.578125
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:13.747903: step 2, loss 0.687019, acc 0.59375
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:17.092640: step 3, loss 0.707729, acc 0.578125
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:20.452340: step 4, loss 0.672532, acc 0.59375
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:23.764068: step 5, loss 0.70951, acc 0.484375
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:27.086471: step 6, loss 0.690488, acc 0.546875
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:30.387757: step 7, loss 0.698897, acc 0.53125
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:33.703763: step 8, loss 0.679211, acc 0.515625
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:37.056839: step 9, loss 0.679561, acc 0.5625
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:40.397484: step 10, loss 0.667733, acc 0.59375
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:43.732127: step 11, loss 0.685563, acc 0.515625
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:47.036939: step 12, loss 0.676983, acc 0.5625
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:50.440702: step 13, loss 0.716622, acc 0.53125
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:53.795050: step 14, loss 0.68866, acc 0.53125
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:53:57.161249: step 15, loss 0.698155, acc 0.484375
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:54:00.736224: step 16, loss 0.694952, acc 0.5625
+
+
+embedded characters 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+lstm outputs 
+fwd: [ 64  56 300] 
+rev: [ 64  56 300]
+
+
+output: [ 64  56 300] 
+mean: [ 64 300]
+2016-08-05T02:54:04.191596: step 17,

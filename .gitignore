@@ -1,5 +1,5 @@
 runs/
-cnn-text-classification-tf/
+#cnn-text-classification-tf/
 Examples/
 tf-documentation/
 start_tf

@@ -6,7 +6,8 @@ from tensorflow.python.ops import rnn_cell, rnn, nn, array_ops
 class TextLSTM(object):
     def __init__(
         self, sequence_length, num_classes, vocab_size, 
-        embedding_size, hidden_size, l2_reg_lambda=0.0):
+        embedding_size, hidden_size,
+        filter_sizes, num_filters, l2_reg_lambda=0.0):
 
         # Placeholders for input, sequence length, output and dropout
         self.input_x = tf.placeholder(tf.int32, [None, sequence_length], name="input_x")
@@ -39,7 +40,7 @@ class TextLSTM(object):
             lstm_bw_cell = rnn_cell.BasicLSTMCell(hidden_size, forget_bias=1.0)
 
             with tf.variable_scope("lstm-output-fw"):
-                lstm_outputs_fw, _ = rnn.dynamic_rnn(
+                self.lstm_outputs_fw, _ = rnn.dynamic_rnn(
                     lstm_fw_cell, 
                     self.embedded_chars, 
                     dtype=tf.float32, 
@@ -52,10 +53,10 @@ class TextLSTM(object):
                     self.embedded_chars_rev,
                     dtype=tf.float32, 
                     sequence_length=self.seqlen)
-                lstm_outputs_bw = array_ops.reverse_sequence(tmp, seq_lengths=self.seqlen, seq_dim=1)
+                self.lstm_outputs_bw = array_ops.reverse_sequence(tmp, seq_lengths=self.seqlen, seq_dim=1)
 
             # Concatenate outputs
-            self.lstm_outputs = tf.add(lstm_outputs_fw, lstm_outputs_bw, name="lstm_outputs")
+            self.lstm_outputs = tf.add(self.lstm_outputs_fw, self.lstm_outputs_bw, name="lstm_outputs")
             self.lstm_outputs_mean = tf.reduce_mean(self.lstm_outputs, reduction_indices=1, name="lstm_outputs_mean")
             # TODO: Outputs after seqlen will be zeroes...
             # But must implement CNN after this point so taking mean can be ignored 
