@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow.python.ops import rnn_cell, rnn, nn, array_ops
 
 
-class TextLSTM(object):
+class Model(object):
     def __init__(
         self, sequence_length, num_classes, vocab_size, 
         embedding_size, hidden_size,

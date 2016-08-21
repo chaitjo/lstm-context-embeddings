@@ -6,7 +6,7 @@ import os
 import time
 import datetime
 import data_helpers
-from text_lstm import TextLSTM
+from model import Model
 from tensorflow.contrib import learn
 
 
@@ -17,6 +17,8 @@ from tensorflow.contrib import learn
 tf.flags.DEFINE_string("word2vec", None, "Word2vec file with pre-trained embeddings (default: None)")
 tf.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of character embedding (default: 300)")
 tf.flags.DEFINE_integer("hidden_dim", 300, "Dimensionality of hidden layer in LSTM (default: 300")
+tf.flags.DEFINE_string("filter_sizes", "3,4,5", "Comma-separated filter sizes (default: '3,4,5')")
+tf.flags.DEFINE_integer("num_filters", 128, "Number of filters per filter size (default: 128)")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
 tf.flags.DEFINE_float("l2_reg_lambda", 0.0, "L2 regularizaion lambda (default: 0.0)")
 
@@ -78,18 +80,20 @@ with tf.Graph().as_default():
     sess = tf.Session(config=session_conf)
     
     with sess.as_default():
-        lstm = TextLSTM(
+        model = Model(
             sequence_length=x_train.shape[1],
             num_classes=2,
             vocab_size=len(vocab_processor.vocabulary_),
             embedding_size=FLAGS.embedding_dim,
             hidden_size=FLAGS.hidden_dim,
+            filter_sizes=list(map(int, FLAGS.filter_sizes.split(","))),
+            num_filters=FLAGS.num_filters,
             l2_reg_lambda=FLAGS.l2_reg_lambda)
 
         # Define Training procedure
         global_step = tf.Variable(0, name="global_step", trainable=False)
         optimizer = tf.train.AdamOptimizer(1e-3)
-        grads_and_vars = optimizer.compute_gradients(lstm.loss)
+        grads_and_vars = optimizer.compute_gradients(model.loss)
         train_op = optimizer.apply_gradients(grads_and_vars, global_step=global_step)
 
         # Keep track of gradient values and sparsity (optional)
@@ -108,8 +112,8 @@ with tf.Graph().as_default():
         print("Writing to {}\n".format(out_dir))
 
         # Summaries for loss and accuracy
-        loss_summary = tf.scalar_summary("loss", lstm.loss)
-        acc_summary = tf.scalar_summary("accuracy", lstm.accuracy)
+        loss_summary = tf.scalar_summary("loss", model.loss)
+        acc_summary = tf.scalar_summary("accuracy", model.accuracy)
 
         # Train Summaries
         train_summary_op = tf.merge_summary([loss_summary, acc_summary, grad_summaries_merged])
@@ -158,7 +162,7 @@ with tf.Graph().as_default():
                     if idx != 0:
                         initW[idx] = np.fromstring(f.read(binary_len), dtype='float32')  
                     else:
-                        f.read(binary_len)    
+                        f.read(binary_len)
 
             sess.run(cnn.W.assign(initW))
 
@@ -167,17 +171,17 @@ with tf.Graph().as_default():
             A single training step
             """
             feed_dict = {
-              lstm.input_x: x_batch,
-              lstm.seqlen: seqlen_batch,
-              lstm.input_y: y_batch,
-              lstm.dropout_keep_prob: FLAGS.dropout_keep_prob
+              model.input_x: x_batch,
+              model.seqlen: seqlen_batch,
+              model.input_y: y_batch,
+              model.dropout_keep_prob: FLAGS.dropout_keep_prob
             }
             _, step, summaries, loss, accuracy = sess.run(
-                [train_op, global_step, train_summary_op, lstm.loss, lstm.accuracy],
+                [train_op, global_step, train_summary_op, model.loss, model.accuracy],
                 feed_dict)
 
             # embedded_chars, embedded_chars_rev, outputs_fw, outputs_bw, outputs, outputs_mean = sess.run(
-            #     [lstm.embedded_chars, lstm.embedded_chars_rev, lstm.lstm_outputs_fw, lstm.lstm_outputs_bw, lstm.lstm_outputs, lstm.lstm_outputs_mean],
+            #     [model.embedded_chars, model.embedded_chars_rev, model.lstm_outputs_fw, model.lstm_outputs_bw, model.lstm_outputs, model.lstm_outputs_mean],
             #     feed_dict)
 
             # print("\n\nembedded characters \nfwd: {} \nrev: {}".format(sess.run(tf.shape(embedded_chars)), sess.run(tf.shape(embedded_chars_rev))))
@@ -193,13 +197,13 @@ with tf.Graph().as_default():
             Evaluates model on a dev set
             """
             feed_dict = {
-              lstm.input_x: x_batch,
-              lstm.seqlen: seqlen_batch,
-              lstm.input_y: y_batch,
-              lstm.dropout_keep_prob: 1.0
+              model.input_x: x_batch,
+              model.seqlen: seqlen_batch,
+              model.input_y: y_batch,
+              model.dropout_keep_prob: 1.0
             }
             step, summaries, loss, accuracy = sess.run(
-                [global_step, dev_summary_op, lstm.loss, lstm.accuracy],
+                [global_step, dev_summary_op, model.loss, model.accuracy],
                 feed_dict)
             
             time_str = datetime.datetime.now().isoformat()
