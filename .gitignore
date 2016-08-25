@@ -1,7 +1,10 @@
 runs/
+tests/
+GoogleNews-vectors-negative300.bin
 #cnn-text-classification-tf/
 Examples/
 tf-documentation/
+output.txt
 start_tf
 start_tf~
 .gitignore~

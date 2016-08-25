@@ -164,7 +164,7 @@ with tf.Graph().as_default():
                     else:
                         f.read(binary_len)
 
-            sess.run(cnn.W.assign(initW))
+            sess.run(model.W.assign(initW))
 
         def train_step(x_batch, seqlen_batch, y_batch):
             """

@@ -91,7 +91,7 @@ class Model(object):
 
         # Add dropout
         with tf.name_scope("dropout"):
-            self.outputs_drop = nn.dropout(self.h_pool_flat, self.dropout_keep_prob)
+            self.h_drop = nn.dropout(self.h_pool_flat, self.dropout_keep_prob)
 
         # Final (unnormalized) scores and predictions
         with tf.name_scope("output"):
