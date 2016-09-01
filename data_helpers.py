@@ -76,3 +76,26 @@ def batch_iter(data, seqlen_data, batch_size, num_epochs, shuffle=True):
             seqlen_batch = seqlen_data[start_index:end_index]
 
             yield shuffled_data[start_index:end_index], seqlen_batch
+            #TODO: Problem with seqlens
+
+
+def pad_sentences(sentences, padding_word="<PAD/>", max_filter=5):
+    """
+    Pads all sentences to the same length. The length is defined by the longest sentence.
+    Returns padded sentences.
+    """
+
+    # Using this might improve accuracy...
+
+    pad_filter = max_filter -1
+    sequence_length = max(len(x) for x in sentences) + 2*pad_filter
+
+    padded_sentences = []
+    for i in range(len(sentences)):
+        sentence = sentences[i]
+        num_padding = sequence_length - len(sentence) - pad_filter
+        new_sentence = [padding_word]*max_filter + sentence + [padding_word] * num_padding
+        padded_sentences.append(new_sentence)
+    
+    return padded_sentences
+

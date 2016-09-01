@@ -23,12 +23,14 @@ class Model(object):
             # W is our embedding matrix that we learn during training. We initialize it using a random uniform distribution
             self.W = tf.Variable(
                 tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
-                trainable=False, 
+                trainable=True, 
                 name="W")
             
             # nn.embedding_lookup creates the actual embedding operation
             # The result of the embedding operation is a 3-dimensional tensor of shape [None, sequence_length, embedding_size]
-            self.embedded_chars = nn.embedding_lookup(self.W, self.input_x)            
+            self.embedded_chars = nn.embedding_lookup(self.W, self.input_x)
+
+            #TODO: Embeddings process ignores commas etc. so seqlens might not be accurate for sentences with commas...     
 
         with tf.name_scope("bidirectional-lstm"):
             # Forward direction LSTM cell
@@ -95,10 +97,15 @@ class Model(object):
 
         # Final (unnormalized) scores and predictions
         with tf.name_scope("output"):
-            W = tf.get_variable(
-                "W", 
-                shape=[num_filters_total, num_classes], 
-                initializer=tf.contrib.layers.xavier_initializer())
+            # Standard output weights initialization
+            # W = tf.get_variable(
+            #     "W", 
+            #     shape=[num_filters_total, num_classes], 
+            #     initializer=tf.contrib.layers.xavier_initializer())
+            # b = tf.Variable(tf.constant(0.1, shape=[num_classes]), name="b")
+
+            # Initialized output weights to 0.0, might improve accuracy
+            W = tf.Variable(tf.constant(0.0, shape=[num_filters_total, num_classes]), name="W")
             b = tf.Variable(tf.constant(0.1, shape=[num_classes]), name="b")
             
             l2_loss += nn.l2_loss(W)
