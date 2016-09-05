@@ -5,7 +5,6 @@ GoogleNews-vectors-negative300.bin
 Examples/
 tf-documentation/
 output.txt
-start_tf
-start_tf~
 .gitignore~
 *.pyc
+*.sh~
