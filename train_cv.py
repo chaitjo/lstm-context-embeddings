@@ -9,7 +9,6 @@ import data_helpers
 from model import Model
 from tensorflow.contrib import learn
 
-
 # Parameters
 # ==================================================
 
@@ -27,6 +26,7 @@ tf.flags.DEFINE_integer("batch_size", 50, "Batch Size (default: 50)")
 tf.flags.DEFINE_integer("num_epochs", 5, "Number of training epochs (default: 5)")
 tf.flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
 tf.flags.DEFINE_integer("checkpoint_every", 100, "Save model after this many steps (default: 100)")
+tf.flags.DEFINE_integer("cv_index", 0, "Cross validation index (default: 0)")
 
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
@@ -42,6 +42,8 @@ print("")
 # Data Preparatopn
 # ==================================================
 
+k = 10
+
 # Load data
 print("Loading data...")
 x_text, y, seqlen = data_helpers.load_data_and_labels()
@@ -54,18 +56,26 @@ vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length) #
 x = np.array(list(vocab_processor.fit_transform(x_text))) # Learn the vocabulary dictionary and return indexies of words
 # At this point, x is an array of list of numbers where each number is the index to a word in the vocabulary.
 
-# Randomly shuffle data
-np.random.seed(10)
-shuffle_indices = np.random.permutation(np.arange(len(y)))
-x_shuffled = x[shuffle_indices]
-y_shuffled = y[shuffle_indices]
-seqlen_shuffled = seqlen[shuffle_indices]
+fold_size = len(x)//k
 
-# Split train/test set
-# TODO: This is very crude, should use cross-validation
-x_train, x_dev = x_shuffled[:-1000], x_shuffled[-1000:]
-y_train, y_dev = y_shuffled[:-1000], y_shuffled[-1000:]
-seqlen_train, seqlen_dev = seqlen_shuffled[:-1000], seqlen_shuffled[-1000:]
+x_train = np.array([]).reshape(0, max_document_length)
+y_train = np.array([]).reshape(0, 2)
+seqlen_train = np.array([])
+
+for i in range(k):
+    x_fold = x[i*fold_size : (i+1)*fold_size]
+    y_fold = y[i*fold_size : (i+1)*fold_size]
+    seqlen_fold = seqlen[i*fold_size : (i+1)*fold_size]
+
+    if i == FLAGS.cv_index:
+        x_dev = x_fold
+        y_dev = y_fold
+        seqlen_dev = seqlen_fold
+
+    else:
+        x_train = np.r_[x_train, x_fold]
+        y_train = np.r_[y_train, y_fold]
+        seqlen_train = np.r_[seqlen_train, seqlen_fold]
 
 print("Vocabulary Size: {:d}".format(len(vocab_processor.vocabulary_)))
 print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))

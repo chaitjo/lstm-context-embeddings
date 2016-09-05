@@ -106,7 +106,7 @@ class Model(object):
 
             # Initialized output weights to 0.0, might improve accuracy
             W = tf.Variable(tf.constant(0.0, shape=[num_filters_total, num_classes]), name="W")
-            b = tf.Variable(tf.constant(0.1, shape=[num_classes]), name="b")
+            b = tf.Variable(tf.constant(0.0, shape=[num_classes]), name="b")
             
             l2_loss += nn.l2_loss(W)
             l2_loss += nn.l2_loss(b)
