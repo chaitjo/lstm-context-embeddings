@@ -13,7 +13,7 @@ from tensorflow.contrib import learn
 # ==================================================
 
 # Model Hyperparameters
-tf.flags.DEFINE_string("word2vec", None, "Word2vec file with pre-trained embeddings (default: None)")
+tf.flags.DEFINE_string("word2vec", "GoogleNews-vectors-negative300.bin", "Word2vec file with pre-trained embeddings (default: None)")
 tf.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of character embedding (default: 300)")
 tf.flags.DEFINE_integer("hidden_dim", 300, "Dimensionality of hidden layer in LSTM (default: 300")
 tf.flags.DEFINE_string("filter_sizes", "3,4,5", "Comma-separated filter sizes (default: '3,4,5')")
@@ -23,7 +23,7 @@ tf.flags.DEFINE_float("l2_reg_lambda", 0.15, "L2 regularizaion lambda (default: 
 
 # Training parameters
 tf.flags.DEFINE_integer("batch_size", 50, "Batch Size (default: 50)")
-tf.flags.DEFINE_integer("num_epochs", 5, "Number of training epochs (default: 5)")
+tf.flags.DEFINE_integer("num_epochs", 100, "Number of training epochs (default: 5)")
 tf.flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
 tf.flags.DEFINE_integer("checkpoint_every", 100, "Save model after this many steps (default: 100)")
 tf.flags.DEFINE_integer("cv_index", 0, "Cross validation index (default: 0)")
@@ -55,6 +55,12 @@ max_document_length = max(seqlen) # '56' for RT corpus
 vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length) # Pads shorter documents
 x = np.array(list(vocab_processor.fit_transform(x_text))) # Learn the vocabulary dictionary and return indexies of words
 # At this point, x is an array of list of numbers where each number is the index to a word in the vocabulary.
+
+shuffled_indices = data_helpers.load_shuffled_indices()
+
+x = x[shuffled_indices]
+y = y[shuffled_indices]
+seqlen = seqlen[shuffled_indices]
 
 fold_size = len(x)//k
 

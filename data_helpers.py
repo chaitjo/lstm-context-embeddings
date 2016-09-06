@@ -51,6 +51,13 @@ def load_data_and_labels():
     
     return [x_text, y, seqlen]
 
+def load_shuffled_indices():
+    """
+    Loads numpy array containing indices list, resulting from random shuffling of dataset.
+    Used in cross validation.
+    """
+    with open("shuffled_indices", "rb") as file:
+        return np.load(file)
 
 def batch_iter(data, seqlen_data, batch_size, num_epochs, shuffle=True):
     """

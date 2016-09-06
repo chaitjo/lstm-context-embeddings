@@ -56,7 +56,12 @@ class Model(object):
 
             # Concatenate outputs
             self.lstm_outputs = tf.add(self.lstm_outputs_fw, self.lstm_outputs_bw, name="lstm_outputs")
-            self.lstm_outputs_expanded = tf.expand_dims(self.lstm_outputs, -1)
+            
+        # Add dropout
+        with tf.name_scope("dropout-lstm"):
+            self.lstm_outputs_drop = nn.dropout(self.lstm_outputs, self.dropout_keep_prob)
+        
+        self.lstm_outputs_expanded = tf.expand_dims(self.lstm_outputs_drop, -1)
 
         # Create a convolution + maxpool layer for each filter size
         pooled_outputs = []
@@ -92,7 +97,7 @@ class Model(object):
         self.h_pool_flat = tf.reshape(self.h_pool, [-1, num_filters_total])
 
         # Add dropout
-        with tf.name_scope("dropout"):
+        with tf.name_scope("dropout-cnn"):
             self.h_drop = nn.dropout(self.h_pool_flat, self.dropout_keep_prob)
 
         # Final (unnormalized) scores and predictions
