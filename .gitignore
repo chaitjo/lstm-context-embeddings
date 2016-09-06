@@ -1,5 +1,4 @@
 runs/
-outputs/
 GoogleNews-vectors-negative300.bin
 #cnn-text-classification-tf/
 Examples/
