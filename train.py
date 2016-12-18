@@ -13,17 +13,17 @@ from tensorflow.contrib import learn
 # ==================================================
 
 # Model Hyperparameters
-tf.flags.DEFINE_string("word2vec", "GoogleNews-vectors-negative300.bin", "Word2vec file with pre-trained embeddings (default: None)")
+tf.flags.DEFINE_string("word2vec", None, "Word2vec file with pre-trained embeddings (default: None)")
 tf.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of character embedding (default: 300)")
 tf.flags.DEFINE_integer("hidden_dim", 300, "Dimensionality of hidden layer in LSTM (default: 300")
 tf.flags.DEFINE_string("filter_sizes", "3,4,5", "Comma-separated filter sizes (default: '3,4,5')")
 tf.flags.DEFINE_integer("num_filters", 100, "Number of filters per filter size (default: 100)")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
-tf.flags.DEFINE_float("l2_reg_lambda", 0, "L2 regularizaion lambda (default: 0.15)")
+tf.flags.DEFINE_float("l2_reg_lambda", 0.15, "L2 regularizaion lambda (default: 0.15)")
 
 # Training parameters
 tf.flags.DEFINE_integer("batch_size", 50, "Batch Size (default: 50)")
-tf.flags.DEFINE_integer("num_epochs", 30, "Number of training epochs (default: 25)")
+tf.flags.DEFINE_integer("num_epochs", 25, "Number of training epochs (default: 25)")
 tf.flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
 tf.flags.DEFINE_integer("checkpoint_every", 100, "Save model after this many steps (default: 100)")
 
@@ -129,13 +129,13 @@ with tf.Graph().as_default():
         checkpoint_prefix = os.path.join(checkpoint_dir, "model")
         if not os.path.exists(checkpoint_dir):
             os.makedirs(checkpoint_dir)
-        saver = tf.train.Saver(tf.all_variables())
+        saver = tf.train.Saver(tf.global_variables())
 
         # Write vocabulary
         vocab_processor.save(os.path.join(out_dir, "vocab"))
 
         # Initialize all variables
-        sess.run(tf.initialize_all_variables())
+        sess.run(tf.global_variables_initializer())
 
         if FLAGS.word2vec:
             # Initialize matrix with random uniform distribution
@@ -147,7 +147,7 @@ with tf.Graph().as_default():
                 vocab_size, layer1_size = map(int, header.split())
                 binary_len = np.dtype('float32').itemsize * layer1_size
                 
-                for line in xrange(vocab_size):
+                for line in range(vocab_size):
                     word = []
                     while True:
                         ch = f.read(1)

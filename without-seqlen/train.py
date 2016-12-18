@@ -13,7 +13,7 @@ from tensorflow.contrib import learn
 # ==================================================
 
 # Model Hyperparameters
-tf.flags.DEFINE_string("word2vec", "GoogleNews-vectors-negative300.bin", "Word2vec file with pre-trained embeddings (default: None)")
+tf.flags.DEFINE_string("word2vec", None, "Word2vec file with pre-trained embeddings (default: None)")
 tf.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of character embedding (default: 300)")
 tf.flags.DEFINE_integer("hidden_dim", 300, "Dimensionality of hidden layer in LSTM (default: 300")
 tf.flags.DEFINE_string("filter_sizes", "3,4,5", "Comma-separated filter sizes (default: '3,4,5')")
@@ -23,10 +23,9 @@ tf.flags.DEFINE_float("l2_reg_lambda", 0, "L2 regularizaion lambda (default: 0.1
 
 # Training parameters
 tf.flags.DEFINE_integer("batch_size", 50, "Batch Size (default: 50)")
-tf.flags.DEFINE_integer("num_epochs", 30, "Number of training epochs (default: 5)")
+tf.flags.DEFINE_integer("num_epochs", 25, "Number of training epochs (default: 25)")
 tf.flags.DEFINE_integer("evaluate_every", 100, "Evaluate model on dev set after this many steps (default: 100)")
 tf.flags.DEFINE_integer("checkpoint_every", 100, "Save model after this many steps (default: 100)")
-tf.flags.DEFINE_integer("cv_index", 0, "Cross validation index (default: 0)")
 
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
@@ -42,46 +41,28 @@ print("")
 # Data Preparatopn
 # ==================================================
 
-k = 10
-
 # Load data
 print("Loading data...")
-x_text, y, seqlen = data_helpers.load_data_and_labels()
+x_text, y = data_helpers.load_data_and_labels()
 # x_text is one huge list with all the sentences as elements
 # y is a list of corresponding labels
 
 # Build vocabulary
-max_document_length = max(seqlen) # '56' for RT corpus
+max_document_length = max([len(x.split(" ")) for x in x_text]) # '56' for RT corpus
 vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length) # Pads shorter documents
 x = np.array(list(vocab_processor.fit_transform(x_text))) # Learn the vocabulary dictionary and return indexies of words
 # At this point, x is an array of list of numbers where each number is the index to a word in the vocabulary.
 
-shuffled_indices = data_helpers.load_shuffled_indices()
+# Randomly shuffle data
+np.random.seed(10)
+shuffle_indices = np.random.permutation(np.arange(len(y)))
+x_shuffled = x[shuffle_indices]
+y_shuffled = y[shuffle_indices]
 
-x = x[shuffled_indices]
-y = y[shuffled_indices]
-seqlen = seqlen[shuffled_indices]
-
-fold_size = len(x)//k
-
-x_train = np.array([]).reshape(0, max_document_length)
-y_train = np.array([]).reshape(0, 2)
-seqlen_train = np.array([])
-
-for i in range(k):
-    x_fold = x[i*fold_size : (i+1)*fold_size]
-    y_fold = y[i*fold_size : (i+1)*fold_size]
-    seqlen_fold = seqlen[i*fold_size : (i+1)*fold_size]
-
-    if i == FLAGS.cv_index:
-        x_dev = x_fold
-        y_dev = y_fold
-        seqlen_dev = seqlen_fold
-
-    else:
-        x_train = np.r_[x_train, x_fold]
-        y_train = np.r_[y_train, y_fold]
-        seqlen_train = np.r_[seqlen_train, seqlen_fold]
+# Split train/test set
+# TODO: This is very crude, should use cross-validation
+x_train, x_dev = x_shuffled[:-1000], x_shuffled[-1000:]
+y_train, y_dev = y_shuffled[:-1000], y_shuffled[-1000:]
 
 print("Vocabulary Size: {:d}".format(len(vocab_processor.vocabulary_)))
 print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
@@ -182,13 +163,12 @@ with tf.Graph().as_default():
 
             sess.run(model.W.assign(initW))
 
-        def train_step(x_batch, seqlen_batch, y_batch):
+        def train_step(x_batch, y_batch):
             """
             A single training step
             """
             feed_dict = {
               model.input_x: x_batch,
-              model.seqlen: seqlen_batch,
               model.input_y: y_batch,
               model.dropout_keep_prob: FLAGS.dropout_keep_prob
             }
@@ -200,13 +180,12 @@ with tf.Graph().as_default():
             print("{}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
             train_summary_writer.add_summary(summaries, step)
 
-        def dev_step(x_batch, seqlen_batch, y_batch, writer=None):
+        def dev_step(x_batch, y_batch, writer=None):
             """
             Evaluates model on a dev set
             """
             feed_dict = {
               model.input_x: x_batch,
-              model.seqlen: seqlen_batch,
               model.input_y: y_batch,
               model.dropout_keep_prob: 1.0
             }
@@ -221,17 +200,17 @@ with tf.Graph().as_default():
 
         # Generate batches
         batches = data_helpers.batch_iter(
-            list(zip(x_train, y_train)), seqlen_train, FLAGS.batch_size, FLAGS.num_epochs)
+            list(zip(x_train, y_train)), FLAGS.batch_size, FLAGS.num_epochs)
         
-        # Training loop. For each batch...
-        for batch, seqlen_batch in batches:
+        # Training loop
+        for batch in batches:
             x_batch, y_batch = zip(*batch)
-            train_step(x_batch, seqlen_batch, y_batch)
+            train_step(x_batch, y_batch)
             current_step = tf.train.global_step(sess, global_step)
             
             if current_step % FLAGS.evaluate_every == 0:
                 print("\nEvaluation:")
-                dev_step(x_dev, seqlen_dev, y_dev, writer=dev_summary_writer)
+                dev_step(x_dev, y_dev, writer=dev_summary_writer)
                 print("")
             
             if current_step % FLAGS.checkpoint_every == 0:
