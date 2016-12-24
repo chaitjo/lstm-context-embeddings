@@ -1,5 +1,7 @@
 runs/
+tflearn/runs/
 GoogleNews-vectors-negative300.bin
+imdb.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
