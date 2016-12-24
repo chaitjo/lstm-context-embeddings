@@ -52,8 +52,6 @@ network = bidirectional_rnn(
 network = tf.pack(network, axis=1)
 
 fw_outputs, bw_outputs = tf.split(split_dim=2, num_split=2, value=network) 
-
-# network = merge([fw_outputs, bw_outputs], mode='elementwise_sum', axis=2)
 network = tf.add(fw_outputs, bw_outputs)
 
 branch1 = conv_1d(network, 128, 3, padding='valid', activation=relu, regularizer="L2")
