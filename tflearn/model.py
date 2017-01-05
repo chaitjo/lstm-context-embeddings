@@ -20,7 +20,7 @@ tf.flags.DEFINE_integer("num_filters", 128, "Number of CNN filters")
 tf.flags.DEFINE_float("dropout_prob", 0.5, "Dropout Probability")
 tf.flags.DEFINE_float("learning_rate", 0.001, "Learning Rate")
 tf.flags.DEFINE_integer("batch_size", 32, "Batch Size")
-tf.flags.DEFINE_integer("num_epochs", 20, "Number of Training Epochs")
+tf.flags.DEFINE_integer("num_epochs", 100, "Number of Training Epochs")
 
 FLAGS = tf.flags.FLAGS
 FLAGS._parse_flags()
