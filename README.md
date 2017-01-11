@@ -16,3 +16,4 @@
 # Ideas
 - gru instead of lstm
 - visualizing
+- cross validation
