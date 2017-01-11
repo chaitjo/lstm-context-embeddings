@@ -1,6 +1,5 @@
 # runs/
 run.sh
-tflearn/runs/
 GoogleNews-vectors-negative300.bin
 imdb.pkl
 
