@@ -44,14 +44,11 @@ print("")
 # Load data
 print("Loading data...")
 x_text, y = data_helpers.load_data_and_labels()
-# x_text is one huge list with all the sentences as elements
-# y is a list of corresponding labels
 
 # Build vocabulary
-max_document_length = max([len(x.split(" ")) for x in x_text]) # '56' for RT corpus
-vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length) # Pads shorter documents
-x = np.array(list(vocab_processor.fit_transform(x_text))) # Learn the vocabulary dictionary and return indexies of words
-# At this point, x is an array of list of numbers where each number is the index to a word in the vocabulary.
+max_document_length = max([len(x.split(" ")) for x in x_text])
+vocab_processor = learn.preprocessing.VocabularyProcessor(max_document_length) 
+x = np.array(list(vocab_processor.fit_transform(x_text))) 
 
 # Randomly shuffle data
 np.random.seed(10)

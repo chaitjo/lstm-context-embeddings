@@ -17,21 +17,15 @@ class Model(object):
 
         # Embedding layer
         with tf.device('/cpu:0'), tf.name_scope("embedding"):
-            # W is our embedding matrix that we learn during training. We initialize it using a random uniform distribution
             self.W = tf.Variable(
                 tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
                 trainable=True, 
                 name="W")
-            
-            # tf.nn.embedding_lookup creates the actual embedding operation
-            # The result of the embedding operation is a 3-dimensional tensor of shape [None, sequence_length, embedding_size]
             self.embedded_chars = tf.nn.embedding_lookup(self.W, self.input_x)
 
         with tf.name_scope("bidirectional-lstm"):
             b = tf.Variable(tf.constant(0.1, shape=[hidden_size]), name="b")
-            # Forward direction LSTM cell
             lstm_fw_cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size, forget_bias=1.0)
-            # Backward direction LSTM cell
             lstm_bw_cell = tf.nn.rnn_cell.BasicLSTMCell(hidden_size, forget_bias=1.0)
 
             self.lstm_outputs, _, _ = tf.nn.bidirectional_dynammic_rnn(lstm_fw_cell, lstm_bw_cell, self.embedded_chars, dtype=tf.float32)

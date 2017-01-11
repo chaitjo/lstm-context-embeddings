@@ -27,13 +27,10 @@ class Model(object):
 
         # Embedding layer
         with tf.device('/cpu:0'), tf.name_scope("embedding"):
-            # W is our embedding matrix that we learn during training. We initialize it using a random uniform distribution
             self.W = tf.Variable(
                 tf.random_uniform([vocab_size, embedding_size], -1.0, 1.0),
                 trainable=True, 
                 name="W")
-            # tf.nn.embedding_lookup creates the actual embedding operation
-            # The result of the embedding operation is a 3-dimensional tensor of shape [None, sequence_length, embedding_size]
             self.embedded_chars = tf.nn.embedding_lookup(self.W, self.input_x)
             #TODO: Embeddings process ignores commas etc. so seqlens might not be accurate for sentences with commas...     
 
