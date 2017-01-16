@@ -2,7 +2,7 @@
 Presented here is a novel method to modify the vector embeddings of a word in a sentence with its surrounding context using a biderectional Recurrent Neural Network (RNN). This repository contains code implementations, experimental results and visualizations.
 
 # Model
-![Bidirectional RNN layer](../blob/master/res/bidirectional-rnn.png?raw=true)
+![Bidirectional RNN layer](../master/res/bidirectional-rnn.png?raw=true)
 
 Given the word embeddings for each word in a sentence/sequence of words, it can be represented as a 2-D tensor of shape (`seq_len`, `embedding_dim`). Then the following steps can be performed to add infomation about the surrounding words to each embedding- 
 
@@ -39,16 +39,16 @@ All models were trained with the following hyperparameters using the Adam optimi
 
 # Results
 Training Accuracy - 
-![Training Accuracy](https://raw.githubusercontent.com/chaitjo/lstm-context-embeddings/master/res/acc.png)
+![Training Accuracy](../master/res/acc.png?raw=true)
 
 Training Loss -
-![Training Loss](https://raw.githubusercontent.com/chaitjo/lstm-context-embeddings/master/res/loss.png)
+![Training Loss](../master/res/loss.png?raw=true)
 
 Validation Accuracy -
-![Validation Accuracy](https://raw.githubusercontent.com/chaitjo/lstm-context-embeddings/master/res/acc-val.png)
+![Validation Accuracy](../master/res/acc-val.png?raw=true)
 
 Vallidation Loss -
-![Validation Loss](https://raw.githubusercontent.com/chaitjo/lstm-context-embeddings/master/res/loss-val.png)
+![Validation Loss](../master/res/loss-val.png?raw=true)
 
 Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN pre-processing layer after the word embedding layer improve a generic text classification model's performance. However, more rigourous experimentation needs to be done to confirm this hyposthesis.
 
