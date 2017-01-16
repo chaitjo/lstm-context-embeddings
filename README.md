@@ -19,7 +19,7 @@ Given the word embeddings for each word in a sentence/sequence of words, the seq
 The cells used in the RNNs are the [Long Short-term Memory (LSTM)](http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf) cells, which are better at capturing long-term dependencies than vanilla RNN cells. This ensures our model doesn't just consider the nearest neighbours while modifying a word's embedding.
 
 # Implementation
-The code implements the proposed model as a pre-processing layer before feeding it into a [Convolutional Neural Network for Sentence Classification](https://arxiv.org/abs/1408.5882) (Kim, 2014). Two implementations are provided to run experiments- one with [tensorflow](https://www.tensorflow.org/) and one with [tflearn](http://tflearn.org/) (A high-level API for tensorflow). Training happens end-to-end in a supervised manner - the RNN layer is simply inserted as part of the existing model's architecture for text classification.
+The code implements the proposed model as a pre-processing layer before feeding it into a [Convolutional Neural Network for Sentence Classification](https://arxiv.org/abs/1408.5882) (Kim, 2014). Two implementations are provided to run experiments- one with [tensorflow](https://www.tensorflow.org/) and one with [tflearn](http://tflearn.org/) (A high-level API for tensorflow). Training happens end-to-end in a supervised manner- the RNN layer is simply inserted as part of the existing model's architecture for text classification.
 
 The tensorflow version is built on top of [Denny Britz's implementation of Kim's CNN](https://github.com/dennybritz/cnn-text-classification-tf), and also allows loading pre-trained [word2vec](https://code.google.com/archive/p/word2vec/) embeddings. 
 
@@ -35,7 +35,7 @@ The following three models were considered- (Implementations can be found in `/t
 2. The [proposed model](../master/res/lstm%2Bcnn-128.png?raw=true), `embedding_dim = 128`, `rnn_hidden_size = 128`, `rnn_hidden_size = 128`, `num_filters = 128` **[PURPLE]**
 3. The [proposed model with more capacity](../master/res/lstm%2Bcnn-300.png?raw=true), `embedding_dim = 300`, `rnn_hidden_size = 300`, `num_filters = 150` **[BLUE]**
 
-All models were trained with the following hyperparameters using the Adam optimizer - `num_epochs = 100`, `batch_size = 32`, `learning_rate = 0.001`. Ten percent of the data was held out for validation.
+All models were trained with the following hyperparameters using the Adam optimizer- `num_epochs = 100`, `batch_size = 32`, `learning_rate = 0.001`. Ten percent of the data was held out for validation.
 
 # Results
 Training Accuracy-
@@ -68,12 +68,12 @@ It is also extremely worrying to see the validation loss increasing instead of d
 5. Cross validation should be performed to present results instead of randomly splitting the dataset.
 
 # Usage
-Tensorflow code is divided into `model.py`, which abstracts the model as a class and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional hyperparameter flags) -
+Tensorflow code is divided into `model.py`, which abstracts the model as a class and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional hyperparameter flags)-
 ```
 $ python train.py [--flag=1]
 ```
 
-Tflearn code can be found in the `/tflearn` folder and can be run directly to start training (with optional hyperparameter flags) - 
+Tflearn code can be found in the `/tflearn` folder and can be run directly to start training (with optional hyperparameter flags)-
 ```
 $ python tflearn/model.py [--flag=1]
 ```
