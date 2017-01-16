@@ -32,7 +32,7 @@ The dataset chosen for training and testing the tensorflow code is the [Pang & L
 The following three models were considered- (Implementations can be found in `/tflearn`)
 
 1. Kim's [baseline CNN model](../master/res/cnn-128.png?raw=true) without the RNN layer, `embedding_dim = 128`, `num_filters = 128` **[ORANGE]**
-2. [The proposed model](../master/res/lstm%2Bcnn-128.png?raw=true), `embedding_dim = 128`, `rnn_hidden_size = 128`, `rnn_hidden_size = 128`, `num_filters = 128` **[PURPLE]**
+2. [The proposed model](../master/res/lstm%2Bcnn-128.png?raw=true), `embedding_dim = 128`, `rnn_hidden_size = 128`, `num_filters = 128` **[PURPLE]**
 3. [The proposed model with more capacity](../master/res/lstm%2Bcnn-300.png?raw=true), `embedding_dim = 300`, `rnn_hidden_size = 300`, `num_filters = 150` **[BLUE]**
 
 All models were trained with the following hyperparameters using the Adam optimizer- `num_epochs = 100`, `batch_size = 32`, `learning_rate = 0.001`. Ten percent of the data was held out for validation.
@@ -52,20 +52,20 @@ Vallidation Loss-
 
 Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN layer after the word embedding layer improve a generic text classification model's performance. More rigourous experimentation needs to be done to confirm this hyposthesis.
 
-An unanswered question is whether the bump in accuracy is because the RNN layer actually adds contextual information to independent word embeddings or simply because of more matrix multiplications by the network. However, adding more hidden units to the RNN layer does not lead to drastic changes in accuracy, suggesting that the former is true.
+**An unanswered question is whether the bump in accuracy is because the RNN layer actually adds contextual information to independent word embeddings or simply because of more matrix multiplications by the network. However, adding more hidden units to the RNN layer does not lead to drastic changes in accuracy, suggesting that the former is true.**
 
 It is also extremely worrying to see the validation loss increasing instead of decreasing as training continues. This issue needs investigation.
 
 # Ideas and Next Steps
-1. Visualizations of the modified embeddings in a sequence can be compared to their original embeddings to confirm that their modification is due to their surrounding words and is not random.
+1. **Visualizations of the modified embeddings** in a sequence can be compared to their original embeddings to confirm that their modification is due to their surrounding words and is not random.
 
 2. An `n` layer vanilla neural network for text classification can be compared to a model with the RNN layer followed by an `n-1` layer vanilla network. This should be a 'fairer fight' than a deep CNN vs RNN under deep CNN.
 
-3. Experiments can be carried out on having static vs non-static word embeddings being passed to the RNN layer and initialization using pre-trained embeddings. 
+3. Experiments can be carried out on having **static vs non-static word embeddings** being passed to the RNN layer and initialization using pre-trained embeddings. 
 
-4. Experiments can be carried out to determine the optimum depth of the RNN layer for different models on top of it. (Currently it is a single layer, but the concept can be easily extended to multilayer bidirectional RNNs.)
+4. Experiments can be carried out to determine the optimum **depth of the RNN layer** for different models on top of it. (Currently it is a single layer, but the concept can be easily extended to multilayer bidirectional RNNs.)
 
-5. Cross validation should be performed to present results instead of randomly splitting the dataset.
+5. **Cross validation** should be performed to present results instead of randomly splitting the dataset.
 
 # Usage
 Tensorflow code is divided into `model.py`, which abstracts the model as a class and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional hyperparameter flags)-
