@@ -20,7 +20,7 @@ The cells used in the RNNs are the Long Short-term Memory (LSTM) cells, which ar
 
 The tensorflow version is built on top of [Denny Britz's implementation of Kim's CNN](https://github.com/dennybritz/cnn-text-classification-tf), and also allows loading pre-trained word embeddings like [word2vec](https://code.google.com/archive/p/word2vec/).
 
-Training happens end-to-end, the RNN layer is simply inserted as part of the existing model's architecture for text classification. 
+Training happens end-to-end in a supervised manner - the RNN layer is simply inserted as part of the existing model's architecture for text classification. 
 
 Although both versions work exactly as intended, the repository currently contains results from experiments with the tflearn version only. More results will be added soon.
 
