@@ -44,6 +44,8 @@ Training Accuracy-
 Training Loss- 
 ![Training Loss](../master/res/loss.png?raw=true)
 
+It is clear that training converges for all three models.
+
 Validation Accuracy-
 ![Validation Accuracy](../master/res/acc-val.png?raw=true)
 
@@ -59,21 +61,21 @@ It is also extremely worrying to see the validation loss increasing instead of d
 # Ideas and Next Steps
 1. Visualizations of the modified embeddings in a sequence can be compared to their original embeddings to confirm that their modification is due to their surrounding words and is not random.
 
-2. An `n` layer vanilla neural network for text classification can be compared to a model with the RNN layer followed by an `n-1` layer vanilla network. This should be a 'fairer fight' than a deep CNN vs RNN under deep CNN.
+2. An `n` layer vanilla neural network for text classification can be compared to a model with the RNN layer followed by an `n-1` layer vanilla network. This should be a 'fairer fight' than a deep CNN vs RNN followed by deep CNN.
 
 3. Experiments can be carried out on having static vs non-static word embeddings being passed to the RNN layer and initialization using pre-trained embeddings. 
 
-4. Experiments can be carried out to determine the optimum depth of the RNN layer for different models on top of it. (Currently it is a single layer, but the concept can be easily extended to multilayer bidirectional RNNs.)
+4. Experiments can be performed to determine the optimum depth of the RNN layer for different kinds of models on top of it. (Currently it is a single layer, but the concept can easily be extended to multilayer bidirectional RNNs.)
 
 5. Cross validation should be performed to present results instead of randomly splitting the dataset.
 
 # Usage
-Tensorflow code is divided into `model.py`, which abstracts the model as a class and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional hyperparameter flags)-
+Tensorflow code is divided into `model.py` which abstracts the model as a class, and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional flags to set hyperparameters)-
 ```
 $ python train.py [--flag=1]
 ```
 
-Tflearn code can be found in the `/tflearn` folder and can be run directly to start training (with optional hyperparameter flags)-
+Tflearn code can be found in the `/tflearn` folder and can be run directly to start training (with optional flags to set hyperparameters)-
 ```
 $ python tflearn/model.py [--flag=1]
 ```
