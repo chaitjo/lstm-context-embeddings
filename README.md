@@ -57,15 +57,15 @@ Higher Validation Accuracy (~3%) and lower Validation Loss for the model compare
 It is also extremely worrying to see the validation loss increasing instead of decreasing as training continues. This issue needs investigation.
 
 # Ideas and Next Steps
-1. **Visualizations of the modified embeddings** in a sequence can be compared to their original embeddings to confirm that their modification is due to their surrounding words and is not random.
+1. Visualizations of the modified embeddings in a sequence can be compared to their original embeddings to confirm that their modification is due to their surrounding words and is not random.
 
 2. An `n` layer vanilla neural network for text classification can be compared to a model with the RNN layer followed by an `n-1` layer vanilla network. This should be a 'fairer fight' than a deep CNN vs RNN under deep CNN.
 
-3. Experiments can be carried out on having **static vs non-static word embeddings** being passed to the RNN layer and initialization using pre-trained embeddings. 
+3. Experiments can be carried out on having static vs non-static word embeddings being passed to the RNN layer and initialization using pre-trained embeddings. 
 
-4. Experiments can be carried out to determine the optimum **depth of the RNN layer** for different models on top of it. (Currently it is a single layer, but the concept can be easily extended to multilayer bidirectional RNNs.)
+4. Experiments can be carried out to determine the optimum depth of the RNN layer for different models on top of it. (Currently it is a single layer, but the concept can be easily extended to multilayer bidirectional RNNs.)
 
-5. **Cross validation** should be performed to present results instead of randomly splitting the dataset.
+5. Cross validation should be performed to present results instead of randomly splitting the dataset.
 
 # Usage
 Tensorflow code is divided into `model.py`, which abstracts the model as a class and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional hyperparameter flags)-
