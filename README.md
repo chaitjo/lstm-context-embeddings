@@ -9,7 +9,7 @@ Given the embeddings for all the words in a sentence like *'the quick brown fox 
 Applied in combination with pre-trained word embeddings (like [word2vec](https://code.google.com/archive/p/word2vec/) or [GloVe](http://nlp.stanford.edu/projects/glove/)) which encode global syntactic and semantic information about words such as *'fox'* and *'dog'*, the method adds local context to these embeddings based on surrounding words. The new embeddings can then be fed into a text classification network.
 
 # Model
-![Bidirectional RNN layer](../master/res/bidirectional-rnn.png?raw=true)
+![Bidirectional RNN layer](res/bidirectional-rnn.png?raw=true)
 
 Given the word embeddings for each word in a sentence/sequence of words, the sequence can be represented as a 2-D tensor of shape (`seq_len`, `embedding_dim`). The following steps can be performed to add infomation about the surrounding words to each embedding- 
 
@@ -44,18 +44,18 @@ All models were trained with the following hyperparameters using the Adam optimi
 
 # Results
 Training Accuracy-
-![Training Accuracy](../master/res/acc.png?raw=true)
+![Training Accuracy](res/acc.png?raw=true)
 
 Training Loss- 
-![Training Loss](../master/res/loss.png?raw=true)
+![Training Loss](res/loss.png?raw=true)
 
 It is clear that training converges for all three models.
 
 Validation Accuracy-
-![Validation Accuracy](../master/res/acc-val.png?raw=true)
+![Validation Accuracy](res/acc-val.png?raw=true)
 
 Vallidation Loss-
-![Validation Loss](../master/res/loss-val.png?raw=true)
+![Validation Loss](res/loss-val.png?raw=true)
 
 Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN layer after the word embedding layer improve a generic text classification model's performance. More rigourous experimentation needs to be done to confirm this hyposthesis.
 
