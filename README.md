@@ -36,9 +36,9 @@ The dataset chosen for training and testing the tensorflow code is the [Pang & L
 # Experiments
 The following three models were considered- (Implementations can be found in `/tflearn`)
 
-1. Kim's [baseline CNN model](../master/res/cnn-128.png?raw=true) without the RNN layer, `embedding_dim = 128`, `num_filters = 128` **[ORANGE]**
-2. [The proposed model](../master/res/lstm%2Bcnn-128.png?raw=true), `embedding_dim = 128`, `rnn_hidden_size = 128`, `num_filters = 128` **[PURPLE]**
-3. [The proposed model with more capacity](../master/res/lstm%2Bcnn-300.png?raw=true), `embedding_dim = 300`, `rnn_hidden_size = 300`, `num_filters = 150` **[BLUE]**
+1. Kim's [baseline CNN model](res/cnn-128.png?raw=true) without the RNN layer, `embedding_dim = 128`, `num_filters = 128` **[ORANGE]**
+2. [The proposed model](res/lstm%2Bcnn-128.png?raw=true), `embedding_dim = 128`, `rnn_hidden_size = 128`, `num_filters = 128` **[PURPLE]**
+3. [The proposed model with more capacity](res/lstm%2Bcnn-300.png?raw=true), `embedding_dim = 300`, `rnn_hidden_size = 300`, `num_filters = 150` **[BLUE]**
 
 All models were trained with the following hyperparameters using the Adam optimizer- `num_epochs = 100`, `batch_size = 32`, `learning_rate = 0.001`. Ten percent of the data was held out for validation.
 
