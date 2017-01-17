@@ -3,10 +3,15 @@ A word embedding is a paramaterized function which maps words in some language t
 
 Presented here is a novel method to modify the embeddings of a word in a sentence with its surrounding context using a biderectional Recurrent Neural Network (RNN). The hypothesis being tested is that these modified embeddings are a better input for text classification networks. This repository contains code implementations, experimental results and visualizations.
 
+# Naive Example
+Given the embeddings for all the words in a sentence like *'the quick brown fox jumps over the lazy dog'*, the proposed model modifies the existing embedding for *'fox'* to incorporate information about it being *'quick'* and *'brown'*, and the fact that it *'jumps over'* the *'dog'* (whose updated embedding now reflect that it is *'lazy'* and got *'jumped over'* by the *'fox'*). 
+
+Applied in combination with pre-trained word embeddings (like [word2vec](https://code.google.com/archive/p/word2vec/) or [GloVe](http://nlp.stanford.edu/projects/glove/)) which encode global syntactic and semantic information about words such as *'fox'* and *'dog'*, the method adds local context to these embeddings based on surrounding words. The new embeddings can then be fed into a text classification network.
+
 # Model
 ![Bidirectional RNN layer](../master/res/bidirectional-rnn.png?raw=true)
 
-Given the word embeddings for each word in a sentence/sequence of words, the sequence can be represented as a 2-D tensor of shape (`seq_len`, `embedding_dim`). Then the following steps can be performed to add infomation about the surrounding words to each embedding- 
+Given the word embeddings for each word in a sentence/sequence of words, the sequence can be represented as a 2-D tensor of shape (`seq_len`, `embedding_dim`). The following steps can be performed to add infomation about the surrounding words to each embedding- 
 
 1. Pass the embedding of each word sequentially into a forward-directional RNN (fRNN). For each sequential timestep, we obtain the hidden state of the fRNN, a tensor of shape (`hidden_size`). The hidden state encodes information about the current word and all the words previously encountered in the sequence. Our final output from the fRNN is a 2-D tensor of shape (`seq_len`, `hidden_size`). 
 
@@ -21,7 +26,7 @@ The cells used in the RNNs are the [Long Short-term Memory (LSTM)](http://deeple
 # Implementation
 The code implements the proposed model as a pre-processing layer before feeding it into a [Convolutional Neural Network for Sentence Classification](https://arxiv.org/abs/1408.5882) (Kim, 2014). Two implementations are provided to run experiments- one with [tensorflow](https://www.tensorflow.org/) and one with [tflearn](http://tflearn.org/) (A high-level API for tensorflow). Training happens end-to-end in a supervised manner- the RNN layer is simply inserted as part of the existing model's architecture for text classification.
 
-The tensorflow version is built on top of [Denny Britz's implementation of Kim's CNN](https://github.com/dennybritz/cnn-text-classification-tf), and also allows loading pre-trained [word2vec](https://code.google.com/archive/p/word2vec/) embeddings. 
+The tensorflow version is built on top of [Denny Britz's implementation of Kim's CNN](https://github.com/dennybritz/cnn-text-classification-tf), and also allows loading pre-trained word2vec embeddings. 
 
 Although both versions work exactly as intended, the repository currently contains results from experiments with the tflearn version only. More results will be added as soon as training converges!
 
@@ -63,7 +68,7 @@ It is also extremely worrying to see the validation loss increasing instead of d
 
 2. An `n` layer vanilla neural network for text classification can be compared to a model with the RNN layer followed by an `n-1` layer vanilla network. This should be a 'fairer fight' than a deep CNN vs RNN followed by deep CNN.
 
-3. Experiments can be carried out on having static vs non-static word embeddings being passed to the RNN layer and initialization using pre-trained embeddings. 
+3. Experiments can be carried out on initialization using pre-trained embeddings passing them as trainable vs non-trainable parameters to the RNN layer; i.e. whether or not we backpropagate errors into the original embedding layer.
 
 4. Experiments can be performed to determine the optimum depth of the RNN layer for different kinds of models on top of it. (Currently it is a single layer, but the concept can easily be extended to multilayer bidirectional RNNs.)
 
