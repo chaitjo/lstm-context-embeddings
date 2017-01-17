@@ -79,6 +79,7 @@ Tensorflow code is divided into `model.py` which abstracts the model as a class,
 ```
 $ python train.py [--flag=1]
 ```
+(Tensorflow code for Kim's baseline CNN can be found in `/cnn-model`.)
 
 Tflearn code can be found in the `/tflearn` folder and can be run directly to start training (with optional flags to set hyperparameters)-
 ```
