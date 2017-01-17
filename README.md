@@ -57,7 +57,7 @@ Validation Accuracy-
 Vallidation Loss-
 ![Validation Loss](res/loss-val.png)
 
-Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN layer after the word embedding layer improve a generic text classification model's performance. More rigourous experimentation needs to be done to confirm this hyposthesis.
+Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN layer after the word embedding layer improves a generic text classification model's performance. More rigourous experimentation needs to be done to confirm this hyposthesis.
 
 **An unanswered question is whether the bump in accuracy is because the RNN layer actually adds contextual information to independent word embeddings or simply because of more matrix multiplications by the network. However, adding more hidden units to the RNN layer does not lead to drastic changes in accuracy, suggesting that the former is true.**
 
