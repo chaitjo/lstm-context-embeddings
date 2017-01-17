@@ -9,7 +9,7 @@ Given the embeddings for all the words in a sentence like *'the quick brown fox 
 Applied in combination with pre-trained word embeddings (like [word2vec](https://code.google.com/archive/p/word2vec/) or [GloVe](http://nlp.stanford.edu/projects/glove/)) which encode global syntactic and semantic information about words such as *'fox'* and *'dog'*, the method adds local context to these embeddings based on surrounding words. The new embeddings can then be fed into a text classification network.
 
 # Model
-![Bidirectional RNN layer](res/bidirectional-rnn.png?raw=true)
+![Bidirectional RNN layer](res/bidirectional-rnn.png)
 
 Given the word embeddings for each word in a sentence/sequence of words, the sequence can be represented as a 2-D tensor of shape (`seq_len`, `embedding_dim`). The following steps can be performed to add infomation about the surrounding words to each embedding- 
 
@@ -36,26 +36,26 @@ The dataset chosen for training and testing the tensorflow code is the [Pang & L
 # Experiments
 The following three models were considered- (Implementations can be found in `/tflearn`)
 
-1. Kim's [baseline CNN model](res/cnn-128.png?raw=true) without the RNN layer, `embedding_dim = 128`, `num_filters = 128` **[ORANGE]**
-2. [The proposed model](res/lstm%2Bcnn-128.png?raw=true), `embedding_dim = 128`, `rnn_hidden_size = 128`, `num_filters = 128` **[PURPLE]**
-3. [The proposed model with more capacity](res/lstm%2Bcnn-300.png?raw=true), `embedding_dim = 300`, `rnn_hidden_size = 300`, `num_filters = 150` **[BLUE]**
+1. Kim's [baseline CNN model](res/cnn-128.png) without the RNN layer, `embedding_dim = 128`, `num_filters = 128` **[ORANGE]**
+2. [The proposed model](res/lstm%2Bcnn-128.png), `embedding_dim = 128`, `rnn_hidden_size = 128`, `num_filters = 128` **[PURPLE]**
+3. [The proposed model with more capacity](res/lstm%2Bcnn-300.png), `embedding_dim = 300`, `rnn_hidden_size = 300`, `num_filters = 150` **[BLUE]**
 
 All models were trained with the following hyperparameters using the Adam optimizer- `num_epochs = 100`, `batch_size = 32`, `learning_rate = 0.001`. Ten percent of the data was held out for validation.
 
 # Results
 Training Accuracy-
-![Training Accuracy](res/acc.png?raw=true)
+![Training Accuracy](res/acc.png)
 
 Training Loss- 
-![Training Loss](res/loss.png?raw=true)
+![Training Loss](res/loss.png)
 
 It is clear that training converges for all three models.
 
 Validation Accuracy-
-![Validation Accuracy](res/acc-val.png?raw=true)
+![Validation Accuracy](res/acc-val.png)
 
 Vallidation Loss-
-![Validation Loss](res/loss-val.png?raw=true)
+![Validation Loss](res/loss-val.png)
 
 Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN layer after the word embedding layer improve a generic text classification model's performance. More rigourous experimentation needs to be done to confirm this hyposthesis.
 
