@@ -1,7 +1,7 @@
 # Overview
 A word embedding is a paramaterized function which maps words in some language to high-dimensional vectors. Converting words to such vector embeddings before passing them into deep neural networks has proved to be a highly effective technique for text classification tasks. 
 
-Presented here is a novel method to modify the embeddings of a word in a sentence with its surrounding context using a biderectional Recurrent Neural Network (RNN). The hypothesis being tested is that these modified embeddings are a better input for text classification networks. This repository contains code implementations, experimental results and visualizations.
+Presented here is a novel method to modify the embeddings of a word in a sentence with its surrounding context using a bidirectional Recurrent Neural Network (RNN). The hypothesis being tested is that these modified embeddings are a better input for text classification networks. This repository contains code implementations, experimental results and visualizations.
 
 # Naive Example
 Given the embeddings for all the words in a sentence like *'the quick brown fox jumps over the lazy dog'*, the proposed model modifies the existing embedding for *'fox'* to incorporate information about it being *'quick'* and *'brown'*, and the fact that it *'jumps over'* the *'dog'* (whose updated embedding now reflect that it is *'lazy'* and got *'jumped over'* by the *'fox'*). 
@@ -59,7 +59,7 @@ Vallidation Loss-
 
 Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN layer after the word embedding layer improves a generic text classification model's performance. More rigourous experimentation needs to be done to confirm this hyposthesis.
 
-**An unanswered question is whether the bump in accuracy is because the RNN layer actually adds contextual information to independent word embeddings or simply because of more matrix multiplications by the network. However, adding more hidden units to the RNN layer does not lead to drastic changes in accuracy, suggesting that the former is true.**
+**An unanswered question is whether the bump in accuracy is because the RNN layer actually added contextual information to independent word embeddings or simply because the model became larger overall. However, adding more capacity to the model (by increasing number of hidden neurons in the RNN and number of CNN filters) does not lead to drastic changes in accuracy, suggesting that the former is true.**
 
 It is also extremely worrying to see the validation loss increasing instead of decreasing as training continues. This issue needs investigation.
 
