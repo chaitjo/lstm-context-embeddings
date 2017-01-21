@@ -58,7 +58,7 @@ Training Accuracy-
 Training Loss- 
 ![Training Loss](res/loss.png)
 
-Its clear that training converges for all three models much before 100 epochs.
+It's clear that training converges for all three models much before 100 epochs.
 
 Validation Accuracy-
 ![Validation Accuracy](res/acc-val.png)
@@ -70,7 +70,7 @@ Higher Validation Accuracy (~3%) and lower Validation Loss for the model compare
 
 **An unanswered question is whether the bump in accuracy is because the RNN layer actually added contextual information to independent word embeddings or simply because the model became larger overall. However, adding more capacity to the model (by increasing number of hidden neurons in the RNN and number of CNN filters) does not lead to drastic changes in accuracy, suggesting that the former is true.**
 
-Its also extremely worrying to see the validation loss increasing instead of decreasing as training continues. This issue needs investigation.
+It's also extremely worrying to see the validation loss increasing instead of decreasing as training continues. This issue needs investigation.
 
 # Ideas and Next Steps
 1. Visualizations of the modified embeddings in a sequence can be compared to their original embeddings to confirm that their modification is due to their surrounding words and is not random.
@@ -79,7 +79,7 @@ Its also extremely worrying to see the validation loss increasing instead of dec
 
 3. Experiments can be carried out on initialization using pre-trained embeddings and passing them as trainable vs non-trainable parameters to the RNN layer; i.e. whether or not we backpropagate errors into the original embedding layer.
 
-4. Experiments can be performed to determine the optimum depth of the RNN layer for different kinds of models on top of it. (Currently its a single layer, but the concept can easily be extended to multilayer bidirectional RNNs.)
+4. Experiments can be performed to determine the optimum depth of the RNN layer for different kinds of models on top of it. (Currently it's a single layer, but the concept can easily be extended to multilayer bidirectional RNNs.)
 
 # Usage
 Tensorflow code is divided into `model.py` which abstracts the model as a class, and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional flags to set hyperparameters)-
