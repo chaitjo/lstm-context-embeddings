@@ -3,10 +3,10 @@ A word embedding is a paramaterized function which maps words in some language t
 
 Presented here is a novel method to modify the embeddings of a word in a sentence with its surrounding context using a bidirectional Recurrent Neural Network (RNN). The hypothesis is that these modified embeddings are a better input for text classification networks. This repository contains code implementations, experimental results and visualizations.
 
-*[Note:https://github.com/chaitjo/lstm-context-embeddings#a-note-on-novelty] It turns out that the idea is not novel and is incorporated inside Google Translate.*
+**NOTE:** [The idea is actually not novel and works so well that it's even used in Google Translate's architecture.](https://github.com/chaitjo/lstm-context-embeddings#a-note-on-novelty)
 
 # Naive Example
-Given the embeddings for all the words in a sentence like *'the quick brown fox jumps over the lazy dog'*, the proposed model modifies the existing embedding for *'fox'* to incorporate information about it being *'quick'* and *'brown'*, and the fact that it *'jumps over'* the *'dog'* (whose updated embedding now reflect that it is *'lazy'* and got *'jumped over'* by the *'fox'*). 
+Given the embeddings for all the words in a sentence like *'the quick brown fox jumps over the lazy dog'*, the proposed model modifies the existing embedding for *'fox'* to incorporate information about it being *'quick'* and *'brown'*, and the fact that it *'jumps over'* the *'dog'* (whose updated embedding now reflect that its *'lazy'* and got *'jumped over'* by the *'fox'*). 
 
 Applied in combination with pre-trained word embeddings (like [word2vec](https://code.google.com/archive/p/word2vec/) or [GloVe](http://nlp.stanford.edu/projects/glove/)) which encode global syntactic and semantic information about words such as *'fox'* and *'dog'*, the method adds local context to these embeddings based on surrounding words. The new embeddings can then be fed into a text classification network.
 
@@ -26,20 +26,18 @@ Given the word embeddings for each word in a sentence/sequence of words, the seq
 The cells used in the RNNs are the [Long Short-term Memory (LSTM)](http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf) cells, which are better at capturing long-term dependencies than vanilla RNN cells. This ensures our model doesn't just consider the nearest neighbours while modifying a word's embedding.
 
 # A note on novelty...
-I had this idea when I was studying word embeddings and how to combine them with deep neural networks for text classification. I started writing the code in July 2016 and learnt much later that the technique I was proposing had already been discussed in some very popular papers in Machine Translation! 
+I had this idea when I was studying word embeddings and how to combine them with deep neural networks for text classification. I started writing the code in July 2016 and learnt much later that the technique I was proposing had already been discussed in some very popular papers in Machine Translation. It is a part of the architecture of Google Translate's new [Zero-Shot Multilingual Translation](https://arxiv.org/pdf/1611.04558v1.pdf) system and had first been proposed by Bahdanou et al(https://arxiv.org/pdf/1409.0473v7.pdf) in 2014.
 
-It is a part of the architecture of Google Translate's new [Zero-Shot Multilingual Translation](https://arxiv.org/pdf/1611.04558v1.pdf) system and had first been proposed by Bahdanou et al(https://arxiv.org/pdf/1409.0473v7.pdf) in 2014.
+To paraphrase Bahdanou et al, *"We obtain an annotation for each word by concatenating the forward and backward states of a bidirectional RNN. The annotation contains the summaries of both the preceding words and the following words. Due to the tendency of RNNs to better represent recent inputs, the annotation will contain information about the whole input sequence with a strong focus on the parts surrounding the anotated word."*
 
-To paraphrase Bahdanou et al, "We obtain an annotation for each word by concatenating the forward and backward states of a bidirectional RNN. The annotation contains the summaries of both the preceding words and the following words. Due to the tendency of RNNs to better represent recent inputs, the annotation will contain information about the whole input sequence with a strong focus on the parts surrounding the anotated word."
-
-Google Translate is probably the best example of a product leveraging neural networks and it is bitter-sweet that my idea is a tiny part of it. I really thought I had come up with something new that could be published! However, this proves that I was thinking along the right track and that the idea works exactly as intended. I am yet to encounter a paper which studies this method rigourously or has applied it in the context of sentiment analysis. 
+Google Translate is probably the best example of a product leveraging neural networks and it's bitter-sweet that my idea is a tiny part of it. I really thought I had come up with something new that could be published! However, this proves that I was thinking along the right track and that the idea works exactly as intended. I am yet to encounter a paper which studies this method rigourously or has applied it in the context of sentiment analysis. 
 
 # Implementation
 The code implements the proposed model as a pre-processing layer before feeding it into a [Convolutional Neural Network for Sentence Classification](https://arxiv.org/pdf/1408.5882v2.pdf) (Kim, 2014). Two implementations are provided to run experiments- one with [tensorflow](https://www.tensorflow.org/) and one with [tflearn](http://tflearn.org/) (A high-level API for tensorflow). Training happens end-to-end in a supervised manner- the RNN layer is simply inserted as part of the existing model's architecture for text classification.
 
 The tensorflow version is built on top of [Denny Britz's implementation of Kim's CNN](https://github.com/dennybritz/cnn-text-classification-tf), and also allows loading pre-trained word2vec embeddings. 
 
-Although both versions work exactly as intended, the repository currently contains results from experiments with the tflearn version only. More results will be added as soon as training converges!
+Although both versions work exactly as intended, the repository currently contains results from experiments with the tflearn version only. More results will be added as soon.
 
 # Datasets
 The dataset chosen for training and testing the tensorflow code is the [Pang & Lee Movie Reviews](http://www.cs.cornell.edu/people/pabo/movie-review-data/) dataset. For the tflearn version, we experiment on the [IMDb Movie Reviews Dataset](http://www.iro.umontreal.ca/~lisa/deep/data/imdb.pkl) by UMontreal. Classification involves detecting positive or negative reviews in both cases.
@@ -60,7 +58,7 @@ Training Accuracy-
 Training Loss- 
 ![Training Loss](res/loss.png)
 
-It is clear that training converges for all three models.
+It is clear that training converges for all three models much before 100 epochs.
 
 Validation Accuracy-
 ![Validation Accuracy](res/acc-val.png)
@@ -68,7 +66,7 @@ Validation Accuracy-
 Vallidation Loss-
 ![Validation Loss](res/loss-val.png)
 
-Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN layer after the word embedding layer improves a generic text classification model's performance. More rigourous experimentation needs to be done to confirm this hyposthesis.
+Higher Validation Accuracy (~3%) and lower Validation Loss for the model compared to the baseline suggests that adding the bidirectional RNN layer after the word embedding layer improves a generic text classification model's performance.
 
 **An unanswered question is whether the bump in accuracy is because the RNN layer actually added contextual information to independent word embeddings or simply because the model became larger overall. However, adding more capacity to the model (by increasing number of hidden neurons in the RNN and number of CNN filters) does not lead to drastic changes in accuracy, suggesting that the former is true.**
 
@@ -77,13 +75,11 @@ It is also extremely worrying to see the validation loss increasing instead of d
 # Ideas and Next Steps
 1. Visualizations of the modified embeddings in a sequence can be compared to their original embeddings to confirm that their modification is due to their surrounding words and is not random.
 
-2. An `n` layer vanilla neural network for text classification can be compared to a model with the RNN layer followed by an `n-1` layer vanilla network. This should be a 'fairer fight' than a deep CNN vs RNN followed by deep CNN in terms of number of parameters.
+2. An `n` layer vanilla neural network for text classification can be compared to a model with the RNN layer followed by an `n-1` layer vanilla network. This should be a 'fairer fight' than a deep-CNN vs RNN-followed-by-deep-CNN in terms of number of parameters.
 
 3. Experiments can be carried out on initialization using pre-trained embeddings and passing them as trainable vs non-trainable parameters to the RNN layer; i.e. whether or not we backpropagate errors into the original embedding layer.
 
 4. Experiments can be performed to determine the optimum depth of the RNN layer for different kinds of models on top of it. (Currently it is a single layer, but the concept can easily be extended to multilayer bidirectional RNNs.)
-
-5. Cross validation should be performed to present results instead of randomly splitting the dataset.
 
 # Usage
 Tensorflow code is divided into `model.py` which abstracts the model as a class, and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional flags to set hyperparameters)-
