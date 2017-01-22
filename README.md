@@ -81,6 +81,8 @@ It's also extremely worrying to see the validation loss increasing instead of de
 
 4. Experiments can be performed to determine the optimum depth of the RNN layer for different kinds of models on top of it. (Currently it's a single layer, but the concept can easily be extended to multilayer bidirectional RNNs.)
 
+5. Various models of soft attention in a sequence of text can be compared for different NLP tasks.
+
 # Usage
 Tensorflow code is divided into `model.py` which abstracts the model as a class, and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional flags to set hyperparameters)-
 ```
