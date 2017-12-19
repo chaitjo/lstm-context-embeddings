@@ -1,6 +1,4 @@
 # Overview
-A [word embedding](http://colah.github.io/posts/2014-07-NLP-RNNs-Representations/) is a paramaterized function which maps words in some language to high-dimensional vectors. Converting words to such vector embeddings before passing them into deep neural networks has proved to be a highly effective technique for text classification tasks and is, according to me, one of the most fascinating topics in NLP research.
-
 Presented here is a method to modify the word embeddings of a word in a sentence with its surrounding context using a bidirectional Recurrent Neural Network (RNN). The hypothesis is that these modified embeddings are a better input for performing text classification tasks like sentiment analysis or polarity detection. 
 
 **Read the full blog post here: [chaitjo.github.io/context-embeddings](https://chaitjo.github.io/context-embeddings/)**
