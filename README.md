@@ -5,10 +5,12 @@ Presented here is a method to modify the word embeddings of a word in a sentence
 
 **Read the full blog post here: [chaitjo.github.io/context-embeddings](https://chaitjo.github.io/context-embeddings/)**
 
+---
+
 ![Bidirectional RNN layer](res/bidirectional-rnn.png)
 
 # Implementation
-The code implements the proposed model as a pre-processing layer before feeding it into a [Convolutional Neural Network for Sentence Classification](https://arxiv.org/pdf/1408.5882v2.pdf) (Kim, 2014). Two implementations are provided to run experiments- one with [tensorflow](https://www.tensorflow.org/) and one with [tflearn](http://tflearn.org/) (A high-level API for tensorflow). Training happens end-to-end in a supervised manner: the RNN layer is simply inserted as part of the existing model's architecture for text classification.
+The code implements the proposed model as a pre-processing layer before feeding it into a [Convolutional Neural Network for Sentence Classification](https://arxiv.org/pdf/1408.5882v2.pdf) (Kim, 2014). Two implementations are provided to run experiments: one with [tensorflow](https://www.tensorflow.org/) and one with [tflearn](http://tflearn.org/) (A high-level API for tensorflow). Training happens end-to-end in a supervised manner: the RNN layer is simply inserted as part of the existing model's architecture for text classification.
 
 The tensorflow version is built on top of [Denny Britz's implementation of Kim's CNN](https://github.com/dennybritz/cnn-text-classification-tf), and also allows loading pre-trained word2vec embeddings. 
 
