@@ -15,6 +15,7 @@ The tensorflow version is built on top of [Denny Britz's implementation of Kim's
 Although both versions work exactly as intended, results in the blog post are from experiments with the tflearn version only.
 
 # Usage
+I used Python 3.6 and Tensorflow 0.12.1 for my experiments.
 Tensorflow code is divided into `model.py` which abstracts the model as a class, and `train.py` which is used to train the model. It can be executed by running the `train.py` script (with optional flags to set hyperparameters)-
 ```
 $ python train.py [--flag=1]
